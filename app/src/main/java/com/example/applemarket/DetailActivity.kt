@@ -11,7 +11,7 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViews()
-        
+
         binding.ivBackButton.setOnClickListener {
             finish()
         }
