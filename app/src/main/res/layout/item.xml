@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <ImageView
+        android:id="@+id/iv_ItemImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/bg_rounded"
+        android:clipToOutline="true"
+        android:src="@drawable/sample6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_ItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/iv_ItemImage"
+        app:layout_constraintTop_toTopOf="@id/iv_ItemImage"
+        tools:text="프라다 복조리백" />
+
+    <TextView
+        android:id="@+id/tv_Location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@id/tv_ItemName"
+        app:layout_constraintTop_toBottomOf="@id/tv_ItemName"
+        tools:text="수원시 영통구 원천동" />
+
+    <TextView
+        android:id="@+id/tv_Price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/tv_ItemName"
+        app:layout_constraintTop_toBottomOf="@id/tv_Location"
+        tools:text="50,000원" />
+
+    <ImageView
+        android:id="@+id/iv_SpeechBubble"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/speech_bubble"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_SpeechBubbleCount" />
+
+    <TextView
+        android:id="@+id/tv_SpeechBubbleCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_Like"
+        tools:text="16" />
+
+    <ImageView
+        android:id="@+id/iv_Like"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/emptyheart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_LikeCount" />
+
+    <TextView
+        android:id="@+id/tv_LikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="25" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
