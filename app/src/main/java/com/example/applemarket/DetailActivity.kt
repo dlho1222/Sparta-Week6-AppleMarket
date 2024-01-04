@@ -3,9 +3,11 @@ package com.example.applemarket
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.applemarket.databinding.ActivityDetailBinding
+import java.text.DecimalFormat
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
+    private val decimalFormat = DecimalFormat("#,###")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -18,14 +20,14 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        val product = intent.getParcelableExtra<Product>("product")
+        val product = intent.getParcelableExtra<Product>(PRODUCT)
         product?.let {
             binding.ivItemImage.setImageResource(it.imageFile)
             binding.tvTitle.text = it.title
             binding.tvSeller.text = it.seller
             binding.tvLocation.text = it.location
             binding.tvContents.text = it.contents
-            binding.tvPrice.text = "${it.price}원"
+            "${decimalFormat.format(it.price)}원".also { binding.tvPrice.text = it }
         }
     }
 }

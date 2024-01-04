@@ -142,7 +142,4 @@ object ProductList {
         list.add(product)
     }
 
-    fun get(index: Int): Product {
-        return list[index]
-    }
 }

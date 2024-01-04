@@ -7,15 +7,19 @@ import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applemarket.ProductList.list
 import com.example.applemarket.databinding.ItemProductBinding
+import java.text.DecimalFormat
 
-class ProductAdapter(val listener:OnClickListener) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(val listener: OnClickListener) :
+    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+    private val decimalFormat = DecimalFormat("#,###")
+
     inner class ProductViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(product: Product) {
             binding.ivItemImage.setImageResource(product.imageFile)
             binding.tvItemName.text = product.title
             binding.tvLocation.text = product.location
-            binding.tvPrice.text = "${product.price}원"
+            binding.tvPrice.text = "${decimalFormat.format(product.price)}원"
             binding.tvLikeCount.text = product.like.toString()
             binding.tvSpeechBubbleCount.text = product.conversation.toString()
         }
@@ -29,7 +33,7 @@ class ProductAdapter(val listener:OnClickListener) : RecyclerView.Adapter<Produc
     }
 
     override fun getItemCount(): Int {
-        return ProductList.list.size
+        return list.size
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -40,6 +44,7 @@ class ProductAdapter(val listener:OnClickListener) : RecyclerView.Adapter<Produc
         }
     }
 }
-interface OnClickListener{
+
+interface OnClickListener {
     fun itemClick(product: Product)
 }
