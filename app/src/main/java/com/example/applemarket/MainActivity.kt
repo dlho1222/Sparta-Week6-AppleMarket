@@ -4,14 +4,17 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
+import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applemarket.databinding.ActivityMainBinding
 import java.text.DecimalFormat
 
@@ -42,6 +45,19 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
             val divider = DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider
             addItemDecoration(divider)
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {//스크롤 감지
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    // 스크롤을 아래로 내릴 때 // 스크롤을 위로 올릴 때
+                    if (dy > 0) binding.fbScrollButton.show() else if (dy < 0) binding.fbScrollButton.hide()
+                }
+            })
+
+            binding.fbScrollButton.setOnClickListener {//스크롤 이동
+                smoothScrollToPosition(0)
+            }
+
         }
 
     }
