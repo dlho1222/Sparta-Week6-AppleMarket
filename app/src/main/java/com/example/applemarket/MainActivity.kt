@@ -52,21 +52,18 @@ class MainActivity : AppCompatActivity() {
             val divider = DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider
             addItemDecoration(divider)
 
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {//스크롤 감지
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                //스크롤 감지
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     // 스크롤을 아래로 내릴 때 // 스크롤을 위로 올릴 때
                     if (dy > 0) binding.fbScrollButton.show() else if (dy < 0) binding.fbScrollButton.hide()
                 }
             })
-
             binding.fbScrollButton.setOnClickListener {//스크롤 이동
                 smoothScrollToPosition(0)
             }
-
         }
-
-
     }
 
     private fun toDetailActivity(product: Product) {//디테일 페이지 이동
@@ -103,18 +100,18 @@ class MainActivity : AppCompatActivity() {
             .build()
         notificationManager.notify(100, notification)
     }
-    private fun showRemoveDialog(product: Product){
+
+    private fun showRemoveDialog(product: Product) { //롱 클릭시 ... 확인을 누르면 아이템 삭제 다이얼로그
         AlertDialog.Builder(this).apply {
             setIcon(R.drawable.speech_bubble)
             setTitle("종료")
             setMessage("상품을 정말로 삭제하시겠습니까?")
             setNegativeButton("취소") { dialogInterface, _ -> dialogInterface.cancel() }
-            setPositiveButton("확인") { _, _ -> ProductList.remove(product)
-            productAdapter.notifyDataSetChanged()
+            setPositiveButton("확인") { _, _ ->
+                ProductList.remove(product)
+                productAdapter.notifyDataSetChanged()
             }
-
             show()
-
         }
     }
 }
