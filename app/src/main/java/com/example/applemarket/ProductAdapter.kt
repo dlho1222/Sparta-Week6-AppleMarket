@@ -4,6 +4,9 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemLongClickListener
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applemarket.ProductList.list
 import com.example.applemarket.databinding.ItemProductBinding
@@ -39,12 +42,20 @@ class ProductAdapter(val listener: OnClickListener) :
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = list[position]
         holder.bind(product)
+        holder.itemView.setOnLongClickListener {
+            listener.longClick(product)
+            true
+        }
         holder.itemView.setOnClickListener {
             listener.itemClick(product)
         }
+
+
     }
+
 }
 
 interface OnClickListener {
     fun itemClick(product: Product)
+    fun longClick(product: Product)
 }

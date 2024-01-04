@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -36,7 +37,12 @@ class MainActivity : AppCompatActivity() {
     private fun initRecyclerView() { // 리사이클러뷰 화면 셋팅
         productAdapter = ProductAdapter(object : OnClickListener {
             override fun itemClick(product: Product) {
+
                 toDetailActivity(product)
+            }
+
+            override fun longClick(product: Product) {
+                showRemoveDialog(product)
             }
 
         })
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
 
     }
 
@@ -95,6 +102,20 @@ class MainActivity : AppCompatActivity() {
             .setContentText("설정한 키워드에 대한 알림이 도착했습니다!!")
             .build()
         notificationManager.notify(100, notification)
+    }
+    private fun showRemoveDialog(product: Product){
+        AlertDialog.Builder(this).apply {
+            setIcon(R.drawable.speech_bubble)
+            setTitle("종료")
+            setMessage("상품을 정말로 삭제하시겠습니까?")
+            setNegativeButton("취소") { dialogInterface, _ -> dialogInterface.cancel() }
+            setPositiveButton("확인") { _, _ -> ProductList.remove(product)
+            productAdapter.notifyDataSetChanged()
+            }
+
+            show()
+
+        }
     }
 }
 

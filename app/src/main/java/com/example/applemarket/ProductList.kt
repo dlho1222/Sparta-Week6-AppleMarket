@@ -141,5 +141,10 @@ object ProductList {
     fun add(product: Product) {
         list.add(product)
     }
-
+    fun remove(product: Product){
+        list.remove(product)
+    }
+    fun get(index: Int) :Product{
+        return list[index]
+    }
 }
