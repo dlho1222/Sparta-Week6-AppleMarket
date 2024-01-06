@@ -4,24 +4,26 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
-import android.content.res.ColorStateList
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationManagerCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applemarket.databinding.ActivityMainBinding
-import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var productAdapter: ProductAdapter
+    private val updatedLike =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val updatedLike = result.data?.getBooleanExtra(UPDATED_LIKE, false) ?: false
+            val position = result.data?.getIntExtra(POSITION, 1) ?: 1
+            if (result.resultCode == RESULT_OK) {
+                updatedUi(updatedLike, position)
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +35,22 @@ class MainActivity : AppCompatActivity() {
             notification()
         }
     }
+    private fun updatedUi(updatedLike: Boolean, position: Int) {//like상태 변화
+        val product = ProductList.list[position - 1]  //list의 인덱스
+        product.isLiked = updatedLike
+        productAdapter.notifyItemChanged(position - 1)
+    }
+
 
     private fun initRecyclerView() { // 리사이클러뷰 화면 셋팅
         productAdapter = ProductAdapter(object : OnClickListener {
             override fun itemClick(product: Product) {
-
                 toDetailActivity(product)
             }
 
             override fun longClick(product: Product) {
                 showRemoveDialog(product)
             }
-
         })
         binding.recyclerView.apply {
             adapter = productAdapter
@@ -63,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             binding.fbScrollButton.setOnClickListener {//스크롤 이동
                 smoothScrollToPosition(0)
             }
+
         }
     }
 
@@ -70,7 +77,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, DetailActivity::class.java).apply {
             putExtra(PRODUCT, product)
         }
-        startActivity(intent)
+        updatedLike.launch(intent)
     }
 
     override fun onBackPressed() { //종료 다이얼로그
@@ -84,12 +91,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun notification() { // 채널 생성
-
+    private fun notification() {
+        //notification 채널 생성
         val channel =
             NotificationChannel(CHANNEL_ID, "notification", NotificationManager.IMPORTANCE_DEFAULT)
         val notificationManager = this.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(channel)
+
+
         val notification = Notification.Builder(this, CHANNEL_ID)
             .setSmallIcon(
                 R.drawable.apple,
@@ -101,7 +110,7 @@ class MainActivity : AppCompatActivity() {
         notificationManager.notify(100, notification)
     }
 
-    private fun showRemoveDialog(product: Product) { //롱 클릭시 ... 확인을 누르면 아이템 삭제 다이얼로그
+    private fun showRemoveDialog(product: Product) { //롱 클릭시 확인을 누르면 아이템 삭제 다이얼로그
         AlertDialog.Builder(this).apply {
             setIcon(R.drawable.speech_bubble)
             setTitle("종료")
@@ -114,5 +123,6 @@ class MainActivity : AppCompatActivity() {
             show()
         }
     }
+
 }
 

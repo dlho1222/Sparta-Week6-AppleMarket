@@ -1,7 +1,5 @@
 package com.example.applemarket
 
-import androidx.core.os.persistableBundleOf
-
 object ProductList {
     val list = mutableListOf<Product>()
 
@@ -141,7 +139,12 @@ object ProductList {
     fun add(product: Product) {
         list.add(product)
     }
-    fun remove(product: Product){
+
+    fun remove(product: Product) {
         list.remove(product)
+    }
+
+    fun get(index: Int): Product {
+        return list[index]
     }
 }

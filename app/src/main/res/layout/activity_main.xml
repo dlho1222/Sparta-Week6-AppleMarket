@@ -57,6 +57,7 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="55dp"
         app:rippleColor="#2962FF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
