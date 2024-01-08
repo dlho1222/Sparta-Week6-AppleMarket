@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val updatedLike =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             val updatedLike = result.data?.getBooleanExtra(UPDATED_LIKE, false) ?: false
-            val position = result.data?.getIntExtra(POSITION, 1) ?: 1
+            val position = result.data?.getIntExtra(PRODUCT_POSITION, 1) ?: 1
             if (result.resultCode == RESULT_OK) {
                 updatedUi(updatedLike, position)
             }
@@ -44,10 +44,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecyclerView() { // 리사이클러뷰 화면 셋팅
         productAdapter = ProductAdapter(object : OnClickListener {
+            //itemView 클릭시 toDetailActivity()
             override fun itemClick(product: Product) {
                 toDetailActivity(product)
             }
-
+            //itemView 롱 클릭시 showRemoveDialog()
             override fun longClick(product: Product) {
                 showRemoveDialog(product)
             }
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.apply {
             adapter = productAdapter
             layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
-            val divider = DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider
+            val divider = DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider 추가
             addItemDecoration(divider)
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {

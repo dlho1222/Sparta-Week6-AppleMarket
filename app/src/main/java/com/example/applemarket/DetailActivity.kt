@@ -15,38 +15,21 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initViews()
+        val product = intent.getParcelableExtra<Product>(PRODUCT)
 
         //백버튼 처리
         binding.ivBackButton.setOnClickListener {
-            val product = intent.getParcelableExtra<Product>(PRODUCT)
+            //val product = intent.getParcelableExtra<Product>(PRODUCT)
             Intent().apply {
                 putExtra(UPDATED_LIKE, product?.isLiked)
-                putExtra(POSITION, product?.position)
+                putExtra(PRODUCT_POSITION, product?.position)
                 setResult(RESULT_OK, this)
             }
             finish()
         }
 
-    }
-    override fun onResume() {
-        val product = intent.getParcelableExtra<Product>(PRODUCT)
+        //좋아요 버튼 처리
         product?.let {
-            if(product.isLiked) binding.ivLike.setImageResource(R.drawable.heart) else binding.ivLike.setImageResource(R.drawable.empty_heart)
-        }
-        super.onResume()
-    }
-
-    private fun initViews() {
-        val product = intent.getParcelableExtra<Product>(PRODUCT)
-        product?.let {
-            binding.ivItemImage.setImageResource(it.imageFile)
-            binding.tvTitle.text = it.title
-            binding.tvSeller.text = it.seller
-            binding.tvLocation.text = it.location
-            binding.tvContents.text = it.contents
-            "${decimalFormat.format(it.price)}원".also { binding.tvPrice.text = it }
-
-            //좋아요 버튼 처리
             binding.ivLike.setOnClickListener {
                 product.isLiked = !product.isLiked
                 if (product.isLiked) binding.ivLike.setImageResource(R.drawable.heart) else binding.ivLike.setImageResource(
@@ -58,6 +41,30 @@ class DetailActivity : AppCompatActivity() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    override fun onResume() {
+        //product의 상태에 따라 heart이미지 변경
+        val product = intent.getParcelableExtra<Product>(PRODUCT)
+        product?.let {
+            if (product.isLiked) binding.ivLike.setImageResource(R.drawable.heart) else binding.ivLike.setImageResource(
+                R.drawable.empty_heart
+            )
+        }
+        super.onResume()
+    }
+
+    private fun initViews() {
+        //초기 ui 설정
+        val product = intent.getParcelableExtra<Product>(PRODUCT)
+        product?.let {
+            binding.ivItemImage.setImageResource(it.imageFile)
+            binding.tvTitle.text = it.title
+            binding.tvSeller.text = it.seller
+            binding.tvLocation.text = it.location
+            binding.tvContents.text = it.contents
+            "${decimalFormat.format(it.price)}원".also { binding.tvPrice.text = it }
         }
     }
 }
