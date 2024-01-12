@@ -55,9 +55,15 @@
         android:clickable="true"
         android:src="@drawable/top_arrow"
         android:visibility="invisible"
+        app:borderWidth="0dp"
+        android:hapticFeedbackEnabled="true"
+        android:elevation="0dp"
+        android:tint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="55dp"
+        app:maxImageSize="40dp"
+        app:fabCustomSize="40dp"
+        app:fabSize="normal"
         app:rippleColor="#2962FF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

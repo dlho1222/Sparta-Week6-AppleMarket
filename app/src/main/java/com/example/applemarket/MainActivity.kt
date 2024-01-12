@@ -5,9 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AlphaAnimation
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,10 +33,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         initRecyclerView() //화면 세팅
 
-        binding.ivNotification.setOnClickListener {
-            notification()
+
+        binding.run {
+
+            ivNotification.setOnClickListener {
+                notification()
+            }
+
+            fbScrollButton.setOnClickListener {
+                recyclerView.smoothScrollToPosition(0)
+            }
         }
     }
+
     private fun updatedUi(updatedLike: Boolean, position: Int) {//like상태 변화
         val product = ProductList.list[position - 1]  //list의 인덱스
         product.isLiked = updatedLike
@@ -48,28 +59,65 @@ class MainActivity : AppCompatActivity() {
             override fun itemClick(product: Product) {
                 toDetailActivity(product)
             }
+
             //itemView 롱 클릭시 showRemoveDialog()
             override fun longClick(product: Product) {
                 showRemoveDialog(product)
             }
         })
         binding.recyclerView.apply {
+
+
             adapter = productAdapter
             layoutManager = LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
-            val divider = DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider 추가
+            val divider =
+                DividerItemDecoration(baseContext, LinearLayoutManager.VERTICAL)//divider 추가
             addItemDecoration(divider)
 
+            //애니매이션 효과
+            val fadeIn = AlphaAnimation(0f, 1f).apply { duration = 500 }
+            val fadeOut = AlphaAnimation(1f, 0f).apply { duration = 500 }
+            var isTop = true
+
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                //스크롤 감지
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    // 스크롤을 아래로 내릴 때 // 스크롤을 위로 올릴 때
-                    if (dy > 0) binding.fbScrollButton.show() else if (dy < 0) binding.fbScrollButton.hide()
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+
+                    /*
+                    canScrollVertically(int direction) 메서드는 RecyclerView가 주어진 방향으로 스크롤할 수 있는지 여부를 나타냄. direction -> -1 상단, 1 하단
+                    canScrollVertically(1)은 하단 스크롤할 수 있는지를 확인, canScrollVertically(-1) 상단 스크롤할 수 있는지를 확인
+                    !recyclerView.canScrollVertically(-1)는 상단으로 더 이상 스크롤할 수 없다는 것, newState == RecyclerView.SCROLL_STATE_IDLE는 현재 스크롤 상태가 대기 상태인지를 확인.
+                    */
+
+                    if (!recyclerView.canScrollVertically(-1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        binding.apply {
+                            fbScrollButton.startAnimation(fadeOut)
+                            fbScrollButton.isVisible = false
+                            isTop = true
+                        }
+                    } else {
+                        if (isTop) {
+                            binding.apply {
+                                fbScrollButton.isVisible = true
+                                fbScrollButton.startAnimation(fadeIn)
+                                isTop = false
+                            }
+                        }
+                    }
+
                 }
             })
-            binding.fbScrollButton.setOnClickListener {//스크롤 이동
-                smoothScrollToPosition(0)
-            }
+//            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//                //스크롤 감지
+//                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                    super.onScrolled(recyclerView, dx, dy)
+//                    // 스크롤을 아래로 내릴 때 // 스크롤을 위로 올릴 때
+//                    if (dy > 0) binding.fbScrollButton.show() else if (dy < 0) binding.fbScrollButton.hide()
+//                }
+//            })
+//            binding.fbScrollButton.setOnClickListener {//스크롤 이동
+//                smoothScrollToPosition(0)
+//            }
 
         }
     }
